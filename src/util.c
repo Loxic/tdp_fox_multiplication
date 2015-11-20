@@ -1,6 +1,8 @@
 #include "util.h"
 
-void affiche(int m, int n, double *a, int lda, FILE *flux){
+
+
+void affiche(const int m,const int n,const double *a,const int lda, FILE *flux){
   for(int i=0; i<m; i++){
     for(int j=0; j<n; j++){
       fprintf(flux, "[%f]", a[i+j*lda]);
@@ -10,18 +12,18 @@ void affiche(int m, int n, double *a, int lda, FILE *flux){
   fprintf(flux, "\n");
 }
 
-double * alloc_matrix(int m, int n){
+double * alloc_matrix(const int m,const int n){
   double *r = malloc(sizeof(*r)*m*n);
   return r;
 }
 
-void init_matrix(int m, int n, double *a){
+void init_matrix(const int m,const int n, double *a){
   for(int i=0; i<m*n; i++){
     a[i] = 0.0f;
   }
 }
 
-void init_rand_matrix(int m, int n, double *a){
+void init_rand_matrix(const int m,const int n, double *a){
   srand(time(NULL));
   for(int i=0; i<m*n; i++){
     a[i]=rand()%100;
@@ -35,3 +37,21 @@ void cache_buster(){
     c[i] = i;
   }
 }
+
+double *parse_file(const char * filename, int * size){
+  double * matrix;
+  double temp;
+  FILE * fd;
+  fd = fopen(filename, "r");
+  fscanf(fd,"%d\n",size);
+
+  matrix = malloc((*size)*(*size)*sizeof(double));
+  for(int i = 0; i < *size; i++) {
+    for(int j = 0; j < *size; j++) {
+      if(fscanf(fd,"%lf",&matrix[i+j*(*size)])) {
+      }
+    } 
+  }
+  return matrix;
+}
+
