@@ -12,6 +12,7 @@ double * alloc_matrix(const int m,const int n);
 void init_matrix(const int m,const int n, double *a);
 void init_rand_matrix(int m, int n, double *a);
 void cache_buster();
-double *parse_file(const char * filename, int * size);
+double *parse_matrix_file(const char * filename, int * size);
+void write_matrix_file(const char *filename, double *matrix, int size);
 
 #endif

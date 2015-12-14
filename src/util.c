@@ -38,9 +38,8 @@ void cache_buster(){
   }
 }
 
-double *parse_file(const char * filename, int * size){
+double *parse_matrix_file(const char * filename, int * size){
   double * matrix;
-  double temp;
   FILE * fd;
   fd = fopen(filename, "r");
   fscanf(fd,"%d\n",size);
@@ -55,3 +54,13 @@ double *parse_file(const char * filename, int * size){
   return matrix;
 }
 
+void write_matrix_file(const char *filename, double *matrix, int size){
+  FILE *out = fopen(filename, "w");
+  fprintf(out, "%d\n", size);
+  for(int i=0; i<size; i++){
+    for(int j=0; j<size; j++){
+      fprintf(out, "%lf ", matrix[i*size+j]);
+    }
+    fprintf(out, "\n");
+  }
+}
