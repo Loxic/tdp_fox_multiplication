@@ -1,6 +1,6 @@
 #include "mul_fox.h"
 
-#define RANK_DEBUG 3
+#define RANK_DEBUG 16
 
 int is_nbr_proc_valid(int n){
   int size;
@@ -79,8 +79,8 @@ double * mul_fox(int root_proc, const double * a, const double * b, int n, const
   MPI_Comm_size(proc_grid, &size);
   int mycoord[2];
   MPI_Cart_coords(proc_grid, myrank, 2, mycoord);
-  int dimB_remain[2]={1,0};
-  int dimA_remain[2]={0,1};
+  int dimB_remain[2]={0,1};
+  int dimA_remain[2]={1,0};
   MPI_Comm b_comm, a_comm;
   MPI_Status status;
   MPI_Cart_sub(proc_grid, dimB_remain, &b_comm);
@@ -106,12 +106,13 @@ double * mul_fox(int root_proc, const double * a, const double * b, int n, const
     c_local[i] = 0.0f;
 
   for(int k=0; k<proc_n; k++){
-    int a_coord[1]={(mycoord[0]+k)%proc_n};
+    int a_coord[1];
     int a_rank;
     int b_from, b_to;
     int a_myrank;
     double *tmp_ptr;
 
+    a_coord[0]=(mycoord[1]+k)%proc_n;
     MPI_Cart_rank(a_comm, a_coord, &a_rank);
     //MPI_Cart_rank(a_comm, mycoord, &a_myrank);
     MPI_Comm_rank(a_comm, &a_myrank);
@@ -121,10 +122,13 @@ double * mul_fox(int root_proc, const double * a, const double * b, int n, const
     else
       tmp_ptr=a_buffer;
     MPI_Bcast(tmp_ptr, m*m, MPI_DOUBLE, a_rank, a_comm);
+    //if(myrank==RANK_DEBUG) fprintf(stderr, "Information: k=%d | a_coord[0]=%d | a_rank=%d | a_myrank=%d | mycoord[1]=%d\n", k, a_coord[0], a_rank, a_myrank, mycoord[1]);
+    //if(myrank==RANK_DEBUG) affiche(m,m,tmp_ptr,m,stdout);
 
-    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, m, m, m, 1.0f, tmp_ptr, m, b_local, m, 1.0f, c_local, m);
-
-    if(myrank==RANK_DEBUG) affiche(m,m,c_local,m,stdout);
+    if(m > 10)
+      cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, m, m, m, 1.0f, tmp_ptr, m, b_local, m, 1.0f, c_local, m);
+    else
+      cblas_dgemm_scalaire(CblasNoTrans, CblasNoTrans, m, m, m, 1.0f, tmp_ptr, m, b_local, m, c_local, m);
 
     MPI_Cart_shift(proc_grid, 1, -1, &b_from, &b_to);
     MPI_Sendrecv_replace(b_local, m*m, MPI_DOUBLE, b_to, 42, b_from, 42, proc_grid, &status);
@@ -136,5 +140,6 @@ double * mul_fox(int root_proc, const double * a, const double * b, int n, const
   free(b_local);
 
   c_gather(root_proc, c, c_local, n, proc_grid);
+  free(c_local);
   return c;
 }

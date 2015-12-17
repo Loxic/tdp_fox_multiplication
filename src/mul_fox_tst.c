@@ -26,7 +26,7 @@ int main(int argc, char**argv){
     else{
       fprintf(stdout, "No input filenames. Usage is %s [Matrix A] [Matrix B] [Output].\n", argv[0]);
       MPI_Finalize();
-      return 1;
+      return 0;
     }
     if(argc>3){
       output_file = argv[3];
@@ -37,7 +37,7 @@ int main(int argc, char**argv){
   if(!is_nbr_proc_valid(n)){
     fprintf(stdout, "Number of proc isn't a multiple of matrix size.\n");
     MPI_Finalize();
-    return 1;
+    return 0;
   }
 
   MPI_Comm proc_grid;

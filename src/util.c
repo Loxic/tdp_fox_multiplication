@@ -59,7 +59,7 @@ void write_matrix_file(const char *filename, double *matrix, int size){
   fprintf(out, "%d\n", size);
   for(int i=0; i<size; i++){
     for(int j=0; j<size; j++){
-      fprintf(out, "%lf ", matrix[i*size+j]);
+      fprintf(out, "%lf ", matrix[i+size*j]);
     }
     fprintf(out, "\n");
   }

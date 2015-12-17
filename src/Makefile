@@ -1,7 +1,22 @@
 CC=mpicc
 CFLAGS=-std=c99 -Wall -g
 LDFLAGS=-lm
+REQ=mul_fox.o stack.o util.o blas_lib.o
+TARGETS=mul_fox_tst mul_fox_correctness mul_fox_perf
 
+.PHONY: clean
 
-mul_fox_tst:
-	$(CC) $(CFLAGS) -o $@ mul_fox_tst.c mul_fox.c stack.c util.c blas_lib.c $(LDFLAGS)
+all: $(TARGETS)
+
+mul_fox_correctness: mul_fox_correctness.o $(REQ)
+mul_fox_tst: mul_fox_tst.o $(REQ)
+mul_fox_perf: mul_fox_perf.o $(REQ)
+
+$(TARGETS):
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+%.o:%.c %.h
+	$(CC) $(CFLAGS) -c $< 
+
+clean:
+	rm *.o *~ $(TARGETS)
