@@ -63,4 +63,5 @@ void write_matrix_file(const char *filename, double *matrix, int size){
     }
     fprintf(out, "\n");
   }
+  fclose(out);
 }
