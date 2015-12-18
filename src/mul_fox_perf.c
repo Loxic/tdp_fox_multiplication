@@ -51,7 +51,7 @@ int main(int argc, char**argv){
   smooth_time /= itr;
   MPI_Reduce(&smooth_time, &max_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-  if(myrank==0) fprintf(stdout, "%d %d %lf\n", size, n, smooth_time);
+  if(myrank==0) fprintf(stdout, "%d %d %lf\n", size, n, max_time);
 
   MPI_Finalize();
   return 0;

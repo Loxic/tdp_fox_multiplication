@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color}
+
+\title{TDP n$^o$4\\Multiplication de Fox}
+\author{POUSSARD Mark \\ BLAZART Axel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+Le but de ce tdp est d'étudier plus en profondeur une méthode transverse de produit de matrice, exploitant cette fois-ci un cluster de calcul. Nous utiliserons donc une approche d'échange de message afin de concevoir notre algorithme et pour l'implémentation nous réaliserons ces échanges grace à la bibliothéque \textbf{MPI}.
+
+\section{Algorithmie de la méthode}
+Nous allons à présent décrire le principe et fonctionnement général de la méthode de la multiplication de fox, utilisé ici afin d'effectuer un produit matriciel dans un environnement distribué.
+\subsection{Contraintes sur les données acceptés}
+Nous nous fixerons cependant des contraintes sur la relation entre le nombre de noeuds de calcul participant à la multiplication et la taille de la matrice à traiter, afin de simplifier l'implémentation de l'algorithme. Nous allons nous concentrer sur des matrices carré distribués toutes de même taille. Cette contrainte implique que le nombre total de processeurs soit capable de diviser la matrice en blocs carrés, et donc que la racine carré du nombre de processeur soit multiple de $n$, la longueur/largeur de nos matrices initiales carrés.\\
+Soit $n_{proc}$ le nombre total de processeurs.\\
+Soit $n_{mat}$ la taille de notre matrice carré.\\
+On doit avoir, $n_{mat} \text{mod} n_{proc} == 0$
+\subsection{Dispersion des données initiales}
+Afin de procéder au calcul distribué, il nous faut tout d'abord disperser les données de calcul -c'est à dire les matrices carrés intiales du produit- sur nos noeuds de calcul.
+\subsection{Echanges et calculs}
+\subsection{Assemblage du résultat}
+
+\section{Résultats}
+
+\end{document}
